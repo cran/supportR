@@ -8,8 +8,7 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/njlyon0/supportR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/njlyon0/supportR/actions/workflows/R-CMD-check.yaml)
-![GitHub last
-commit](https://img.shields.io/github/last-commit/njlyon0/supportR)
+[![](https://cranlogs.r-pkg.org/badges/supportR)](https://cran.r-project.org/package=supportR)
 ![GitHub
 issues](https://img.shields.io/github/issues-raw/njlyon0/supportR)
 ![GitHub pull
@@ -33,13 +32,28 @@ You can install the development version from
 devtools::install_github("njlyon0/supportR")
 ```
 
-### Summarizing
+### Data Wrangling
 
 - **`summary_table`**: Calculates summary values (mean, standard
   deviation, sample size, and standard error) of a given response
   variable within supplied groups
 
+- **`crop_tri`**: Removes the specified “triangle” (either upper or
+  lower) of a symmetric data object by replacing with NAs. Also allows
+  user to specify whether to keep or also drop the diagonal
+
+- **`array_melt`**: “Flattens” an array of dimensions X, Y, and Z into a
+  dataframe containing columns `x`, `y`, `z`, and `value` where `value`
+  is whatever was stored in the array at those coordinates
+
 ### Quality Control (QC)
+
+- **`diff_check`**: Compares two vectors and identifies what elements
+  are found in the first but not the second (i.e., *lost* components)
+  and what elements are found in the second but not the first (i.e.,
+  *gained* components). Extremely useful prior to `join`ing two
+  dataframes to compare index column contents or to ensure no columns
+  are unexpectedly lost during complex wrangling operations
 
 - **`num_check`**: Checks a column that *should* contain only
   **numeric** values for any entries that would be coerced to NA if
@@ -58,15 +72,6 @@ devtools::install_github("njlyon0/supportR")
   date formats and identifies its best guess for the format each date is
   in (e.g., ‘dd/mm/yyyy’ versus ‘yyyy/dd/mm’, etc.)
 
-- **`diff_check`**: Compares two vectors and identifies what elements
-  are found in the first but not the second (i.e., *lost* components)
-  and what elements are found in the second but not the first (i.e.,
-  *gained* components)
-
-  - This use-case is more oblique but I find it useful when I’m checking
-    which columns are in the data before versus after a significant
-    wrangling step to make sure no columns are lost/gained unexpectedly
-
 ### Visualization & Graphics
 
 - **`theme_lyon`**: Applies a set of modifications to the non-data
@@ -81,22 +86,20 @@ devtools::install_github("njlyon0/supportR")
   ordination with base R. Requires the distance matrix returned by
   `ape::pcoa`
 
-### Reshaping Data
+### Operations Outside of R
 
-- **`crop_tri`**: Removes the specified “triangle” (either upper or
-  lower) of a symmetric data object by replacing with NAs. Also allows
-  user to specify whether to keep or also drop the diagonal
+- **`github_ls`**: Lists contents of a GitHub repository from its URL
+  and returns a simple dataframe containing the name, type, and file
+  path of identified objects. Supports recursive listing (i.e., listing
+  of contents of subfolders identified in first list of contents)
 
-- **`array_melt`**: “Flattens” an array of dimensions X, Y, and Z into a
-  dataframe containing columns `x`, `y`, `z`, and `value` where `value`
-  is whatever was stored in the array at those coordinates
-
-### Miscellaneous Other Functions
+- **`github_tree`**: Creates a file tree diagram of a GitHub repository
+  from its URL
 
 - **`rmd_export`**: Allows knitting of a specified R Markdown file
-  locally and simultaneously to a specified Google Drive folder. *NOTE:*
-  you must authorize R to work with Google Drive by using
-  `googldrive::drive_auth` for this function to work
+  locally and simultaneously to a specified Google Drive folder.
+  **NOTE:** you must authorize R to work with Google Drive by using
+  `googldrive::drive_auth()` for this function to work
 
 ## Looking Ahead
 

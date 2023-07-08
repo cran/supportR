@@ -7,6 +7,8 @@
 #' @param colors (character) vector of colors (as hexadecimal codes) of length >= group levels (default *not* colorblind safe because of need for 10 built-in unique colors)
 #' @param shapes (numeric) vector of shapes (as values accepted by `pch`) of length >= group levels
 #' @param lines (numeric) vector of line types (as integers) of length >= group levels
+#' @param pt_size (numeric) value for point size (controlled by character expansion i.e., `cex`)
+#' @param pt_alpha (numeric) value for transparency of points (ranges from 0 to 1)
 #' @param leg_pos (character or numeric) legend position, either numeric vector of x/y coordinates or shorthand accepted by `graphics::legend`
 #' @param leg_cont (character) vector of desired legend entries. Defaults to `unique` entries in `groupcol` argument (this argument provided in case syntax of legend contents should differ from data contents)
 #'
@@ -35,7 +37,7 @@
 #' # With the scaled object and original dataframe we can use this function
 #' nms_ord(mod = mds, groupcol = data$factor_4lvl,
 #'                 title = '4-Level NMS', leg_pos = 'topright',
-#'                 leg_cont = c('1', '2', '3', '4'))
+#'                 leg_cont = as.character(1:4))
 #' }
 nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
                     colors = c('#41b6c4', '#c51b7d', '#7fbc41',
@@ -44,6 +46,7 @@ nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
                                '#8c96c6'),
                     shapes = rep(x = 21:25, times = 2),
                     lines = rep(x = 1, times = 10),
+                    pt_size = 1.5, pt_alpha = 1,
                     leg_pos = 'bottomleft', leg_cont = unique(groupcol)) {
 
   # Error out if model or groupcolumn are not specified
@@ -57,7 +60,17 @@ nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
   # Error out for inappropriate shapes / lines
   if(!is.numeric(shapes) | base::max(shapes) > 25 | base::min(shapes < 0))
     stop("`shapes` must be numeric value as defined in `?pch`")
-
+  
+  # Warn and coerce to default for inappropriate point size
+  if(!is.numeric(pt_size)) {
+    message("`pt_size` must be numeric. Coercing to 1.5")
+    pt_size <- 1.5 }
+  
+  # Do the same for transparency
+  if(!is.numeric(pt_alpha)) {
+    message("`pt_alpha` must be numeric. Coercing to 1")
+    pt_alpha <- 1 }
+  
   # Warning message when attempting to plot too many groups
   if (base::length(base::unique(groupcol)) > base::min(base::length(colors),
                                                        base::length(shapes),
@@ -79,6 +92,7 @@ nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
     base::names(lines) <- groups
 
     # Crop all three vectors to the length of groups in the data
+    ## Also adjust color opacity
     colors_actual <- colors[!base::is.na(base::names(colors))]
     shapes_actual <- shapes[!base::is.na(base::names(shapes))]
     lines_actual <- lines[!base::is.na(base::names(lines))]
@@ -92,7 +106,9 @@ nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
     for(level in levels(group_col_fct)){
       graphics::points(x = mod$points[group_col_fct == level, 1],
                        y = mod$points[group_col_fct == level, 2],
-             pch = shapes_actual[level], bg = colors_actual[level]) }
+             pch = shapes_actual[level], 
+             bg = scales::alpha(colour = colors_actual[level], alpha = pt_alpha),
+             cex = pt_size) }
 
     # With all of the points plotted, add ellipses of matched colors
     # This also allows for variation in line type if desired
@@ -104,6 +120,6 @@ nms_ord <- function(mod = NULL, groupcol = NULL, title = NA,
     graphics::legend(x = leg_pos, legend = leg_cont, bty = "n",
            # The "title" of the legend will now be the stress of the NMS
            title = paste0("Stress = ", round(mod$stress, digits = 3)),
-           pch = shapes_actual, cex = 1.15, pt.bg = colors_actual)
+           pt.cex = pt_size, pch = shapes_actual, cex = 1.15, pt.bg = colors_actual)
   }
 }
