@@ -42,6 +42,10 @@ devtools::install_github("njlyon0/supportR")
   lower) of a symmetric data object by replacing with NAs. Also allows
   user to specify whether to keep or also drop the diagonal
 
+- **`name_vec`**: Creates a named vector of specified contents and
+  names. Useful when creating named vectors that are too long to create
+  manually or when creating the vector and then naming it is cumbersome
+
 - **`array_melt`**: “Flattens” an array of dimensions X, Y, and Z into a
   dataframe containing columns `x`, `y`, `z`, and `value` where `value`
   is whatever was stored in the array at those coordinates
@@ -55,18 +59,12 @@ devtools::install_github("njlyon0/supportR")
   dataframes to compare index column contents or to ensure no columns
   are unexpectedly lost during complex wrangling operations
 
-- **`num_check`**: Checks a column that *should* contain only
+- **`num_check`**: Checks column(s) that *should* contain only
   **numeric** values for any entries that would be coerced to NA if
   `as.numeric` is run
 
-  - An extension of this function is **`multi_num_check`** that accepts
-    a vector of columns to check at the same time
-
-- **`date_check`**: Checks a column that *should* contain only **date**
+- **`date_check`**: Checks column(s) that *should* contain only **date**
   values for any entries that would be coerced to NA if `as.Date` is run
-
-  - An extension of this function is **`multi_date_check`** that accepts
-    a vector of columns to check at the same time
 
 - **`date_format_guess`**: Checks a column containing multiple ambiguous
   date formats and identifies its best guess for the format each date is
