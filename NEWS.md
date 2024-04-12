@@ -1,3 +1,11 @@
+# supportR Version 1.3.0
+
+Changes from preceding version are listed below
+
+- New function: `force_num`. Coerces a vector to numeric and automatically silences any warnings due to coercing values to NA
+- New function: `safe_rename`. Renames columns in a given dataframe by matching 'bad' names with 'good' names
+- New function: `tabularize_md`. Converts a markdown file into a table that retains the nested structure of any headings in the file
+
 # supportR Version 1.2.0
 
 Changes from preceding version are listed below

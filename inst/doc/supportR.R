@@ -2,7 +2,7 @@
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
 
 ## ----pre-setup, echo = FALSE, message = FALSE---------------------------------
-# devtools::install_github("njlyon0/supportR")
+# devtools::install_github("njlyon0/supportR", force = TRUE)
 
 ## ----setup--------------------------------------------------------------------
 #install.packages("supportR")
@@ -19,6 +19,14 @@ str(penguins)
 # Summarize the data
 supportR::summary_table(data = penguins, groups = c("species", "island"),
                         response = "bill_length_mm", drop_na = T)
+
+## ----safe-rename--------------------------------------------------------------
+# Make a dataframe to demonstrate
+df <- data.frame("first" = 1:3, "middle" = 4:6, "second" = 7:9)
+
+# Invoke the function
+safe_rename(data = df, bad_names = c("second", "middle"),
+            good_names = c("third", "second"))
 
 ## ----crop_tri-----------------------------------------------------------------
 # Define a simple matrix wtih symmetric dimensions
@@ -144,6 +152,19 @@ supportR::nms_ord(mod = mds, groupcol = data$factor_4lvl,
 #  # Create a file tree diagram of a GitHub repository
 #  supportR::github_tree(repo = repo = "https://github.com/njlyon0/supportR",
 #                        exclude = c("docs", "man", ".github"), quiet = FALSE)
+
+## ----tabularize_md, eval = F--------------------------------------------------
+#  # Identify URL to the NEWS.md file in `supportR` GitHub repo
+#  md_cxn <- url("https://raw.githubusercontent.com/njlyon0/supportR/main/NEWS.md")
+#  
+#  # Transform it into a table
+#  md_df <- tabularize_md(file = md_cxn)
+#  
+#  # Close connection (just good housekeeping to do so)
+#  close(md_cxn)
+#  
+#  # Check out the table format
+#  str(md_df)
 
 ## ----rmd_export, eval = F-----------------------------------------------------
 #  # Authorize R to interact with GoogleDrive

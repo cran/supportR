@@ -5,7 +5,7 @@
 #' @param rmd (character) name and path to R markdown file to knit
 #' @param out_path (character) path to the knit file's destination (defaults to path returned by `getwd`)
 #' @param out_name (character) desired name for knit file (with or without file suffix)
-#' @param out_type (character) either "html" or "pdf" depending on what YML entry you have in the `output: ` field of your R Markdown file
+#' @param out_type (character) either "html" or "pdf" depending on what YAML entry you have in the `output: ` field of your R Markdown file
 #' @param drive_link (character) full URL of drive folder to upload the knit document
 #' 
 #' @return No return value, called to knit R Markdown file
@@ -62,6 +62,5 @@ rmd_export <- function(rmd = NULL, out_path = getwd(), out_name = NULL, out_type
 
     # Upload knit file to desired location
     googledrive::drive_upload(media = file.path(out_path, out_name),
-                              path = id, overwrite = TRUE)
-}
+                              path = id, overwrite = TRUE) }
 

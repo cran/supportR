@@ -38,6 +38,9 @@ devtools::install_github("njlyon0/supportR")
   deviation, sample size, and standard error) of a given response
   variable within supplied groups
 
+- **`safe_rename`**: Renames columns in a given dataframe by matching
+  ‘bad’ names with ‘good’ names
+
 - **`crop_tri`**: Removes the specified “triangle” (either upper or
   lower) of a symmetric data object by replacing with NAs. Also allows
   user to specify whether to keep or also drop the diagonal
@@ -93,6 +96,11 @@ devtools::install_github("njlyon0/supportR")
 
 - **`github_tree`**: Creates a file tree diagram of a GitHub repository
   from its URL
+
+- **`tabularize_md`**: Converts a markdown file into a table that
+  retains the nested structure of any headings in the file. Accepts
+  either the file name/path locally or a URL connection to a markdown
+  file hosted online (e.g., a GitHub repository README.md, etc.)
 
 - **`rmd_export`**: Allows knitting of a specified R Markdown file
   locally and simultaneously to a specified Google Drive folder.
