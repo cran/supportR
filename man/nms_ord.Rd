@@ -14,12 +14,14 @@ nms_ord(
   lines = rep(x = 1, times = 10),
   pt_size = 1.5,
   pt_alpha = 1,
+  lab_text_size = 1.25,
+  axis_text_size = 1,
   leg_pos = "bottomleft",
   leg_cont = unique(groupcol)
 )
 }
 \arguments{
-\item{mod}{Object returned by \code{vegan::metaMDS}}
+\item{mod}{(metaMDS/monoMDS) object returned by \code{vegan::metaMDS}}
 
 \item{groupcol}{(dataframe) column specification in the data that includes the groups (accepts either bracket or $ notation)}
 
@@ -35,14 +37,22 @@ nms_ord(
 
 \item{pt_alpha}{(numeric) value for transparency of points (ranges from 0 to 1)}
 
+\item{lab_text_size}{(numeric) value for axis label text size}
+
+\item{axis_text_size}{(numeric) value for axis tick text size}
+
 \item{leg_pos}{(character or numeric) legend position, either numeric vector of x/y coordinates or shorthand accepted by \code{graphics::legend}}
 
 \item{leg_cont}{(character) vector of desired legend entries. Defaults to \code{unique} entries in \code{groupcol} argument (this argument provided in case syntax of legend contents should differ from data contents)}
 }
 \value{
-(base R plot) base R plot with ellipses for each group
+(plot) base R ordination with an ellipse for each group
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
+
+This function has been superseded by \code{ordination} because this is just a special case of that function. Additionally, \code{ordination} provides users much more control over the internal \code{graphics} functions used to create the fundamental elements of the graph
+
 Produces Non-Metric Multi-dimensional Scaling (NMS) ordinations for up to 10 groups. Assigns a unique color for each group and draws an ellipse around the standard deviation of the points. Automatically adds stress (see \code{vegan::metaMDS} for explanation of "stress") as legend title. Because there are only five hollow shapes (see \code{?graphics::pch()}) all shapes are re-used a maximum of 2 times when more than 5 groups are supplied.
 }
 \examples{

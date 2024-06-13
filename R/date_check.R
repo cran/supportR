@@ -9,23 +9,32 @@
 #' @export
 #'
 #' @examples
-# Make a dataframe to test the function
+#' # Make a dataframe to test the function
 #' loc <- c("LTR", "GIL", "PYN", "RIN")
-#' time <- c('2021-01-01', '2021-01-0w', '1990', '2020-10-xx')
-#' time2 <- c('1880-08-08', '2021-01-02', '1992', '2049-11-01')
-#' time3 <- c('2022-10-31', 'tomorrow', '1993', NA)
+#' time <- c("2021-01-01", "2021-01-0w", "1990", "2020-10-xx")
+#' time2 <- c("1880-08-08", "2021-01-02", "1992", "2049-11-01")
+#' time3 <- c("2022-10-31", "tomorrow", "1993", NA)
 #'
 #' # Assemble our vectors into a dataframe
-#' sites <- data.frame('site' = loc, 'first_visit' = time, "second" = time2, "third" = time3)
+#' sites <- data.frame("site" = loc, "first_visit" = time, "second" = time2, "third" = time3)
 #'
 #' # Use `date_check()` to return only the entries that would be lost
 #' date_check(data = sites, col = c("first_visit", "second", "third"))
+#' 
 date_check <- function(data = NULL, col = NULL) {
 
   # Error out if anything is missing
-  if(base::is.null(data) | base::is.null(col))
-    stop("Data object name and column name must be provided")
+  if(is.null(data) == TRUE)
+    stop("Data object name must be provided")
 
+  # Error out if column(s) is/are missing
+  if(is.null(col) == TRUE)
+    stop("Column name(s) must be provided")
+  
+  # Error out for non-dataframe data
+  if(any(class(data) == "data.frame") != TRUE)
+    stop("Data object must be dataframe-like")
+  
   # Make an empty list to store the malformed dates in
   bad_list <- base::list()
   
@@ -39,10 +48,10 @@ date_check <- function(data = NULL, col = NULL) {
     col_opt <- col[j]
     
     # Remove NA entries
-    notNA <- base::subset(df, !base::is.na(df[, col_opt]))
+    not_na <- base::subset(df, !base::is.na(df[, col_opt]))
     
     # Identify rows that would be lost if `as.Date()` is used
-    bad_df <- base::subset(notNA, is.na(base::as.Date(notNA[, col_opt])))
+    bad_df <- base::subset(not_na, is.na(base::as.Date(not_na[, col_opt])))
     
     # Get a vector of just the unique 'bad' entries
     bad_vec <- base::unique(bad_df[, col_opt])

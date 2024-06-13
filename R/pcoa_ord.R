@@ -1,7 +1,13 @@
 #' @title Publication-Quality Principal Coordinates Analysis (PCoA) Ordinations
-#' @description Produces Principal Coordinates Analysis (PCoA) ordinations for up to 10 groups. Assigns a unique color for each group and draws an ellipse around the standard deviation of the points. Automatically adds percent of variation explained by first two principal component axes parenthetically to axis labels. Because there are only five hollow shapes (see `?graphics::pch`) all shapes are re-used a maximum of 2 times when more than 5 groups are supplied.
+#' 
+#' @description
+#' `r lifecycle::badge("superseded")`
+#' 
+#' This function has been superseded by `ordination` because this is just a special case of that function. Additionally, `ordination` provides users much more control over the internal `graphics` functions used to create the fundamental elements of the graph
+#' 
+#' Produces Principal Coordinates Analysis (PCoA) ordinations for up to 10 groups. Assigns a unique color for each group and draws an ellipse around the standard deviation of the points. Automatically adds percent of variation explained by first two principal component axes parenthetically to axis labels. Because there are only five hollow shapes (see `?graphics::pch`) all shapes are re-used a maximum of 2 times when more than 5 groups are supplied.
 #'
-#' @param mod Object returned by `ape::pcoa`
+#' @param mod (pcoa) object returned by `ape::pcoa`
 #' @param groupcol (dataframe) column specification in the data that includes the groups (accepts either bracket or $ notation)
 #' @param title (character) string to use as title for plot
 #' @param colors (character) vector of colors (as hexadecimal codes) of length >= group levels (default *not* colorblind safe because of need for 10 built-in unique colors)
@@ -9,10 +15,12 @@
 #' @param lines (numeric) vector of line types (as integers) of length >= group levels
 #' @param pt_size (numeric) value for point size (controlled by character expansion i.e., `cex`)
 #' @param pt_alpha (numeric) value for transparency of points (ranges from 0 to 1)
+#' @param lab_text_size (numeric) value for axis label text size
+#' @param axis_text_size (numeric) value for axis tick text size
 #' @param leg_pos (character or numeric) legend position, either numeric vector of x/y coordinates or shorthand accepted by `graphics::legend`
 #' @param leg_cont (character) vector of desired legend entries. Defaults to `unique` entries in `groupcol` argument (this argument provided in case syntax of legend contents should differ from data contents)
 #'
-#' @return (base R plot) base R plot with ellipses for each group
+#' @return (plot) base R ordination with an ellipse for each group
 #'
 #' @export
 #'
@@ -47,6 +55,7 @@ pcoa_ord <- function(mod = NULL, groupcol = NULL, title = NA,
                      shapes = rep(x = 21:25, times = 2),
                      lines = rep(x = 1, times = 10),
                      pt_size = 1.5, pt_alpha = 1,
+                     lab_text_size = 1.25, axis_text_size = 1,
                      leg_pos = 'bottomleft', leg_cont = unique(groupcol)) {
 
   # Error out if model or groupcolumn are not specified
@@ -55,27 +64,37 @@ pcoa_ord <- function(mod = NULL, groupcol = NULL, title = NA,
 
   # Error out if the model is the wrong class
   if(base::class(mod) != "pcoa")
-    stop("Model must be returned by `ape::pcoa`")
+    stop("Model must be returned by 'ape::pcoa'")
 
   # Error out for inappropriate shapes / lines
   if(!is.numeric(shapes) | base::max(shapes) > 25 | base::min(shapes < 0))
-    stop("`shapes` must be numeric value as defined in `?pch`")
+    stop("'shapes' must be numeric value as defined in '?pch'")
 
   # Warn and coerce to default for inappropriate point size
   if(!is.numeric(pt_size)) {
-    message("`pt_size` must be numeric. Coercing to 1.5")
+    warning("'pt_size' must be numeric. Coercing to 1.5")
     pt_size <- 1.5 }
   
   # Do the same for transparency
   if(!is.numeric(pt_alpha)) {
-    message("`pt_alpha` must be numeric. Coercing to 1")
+    warning("'pt_alpha' must be numeric. Coercing to 1")
     pt_alpha <- 1 }
+  
+  # Warning label size
+  if(!is.numeric(lab_text_size)){
+    warning("'lab_text_size' must be numeric. Coercing to 1.25")
+    lab_text_size <- 1.25 }
+  
+  # And axis text size
+  if(!is.numeric(axis_text_size)){
+    warning("'axis_text_size' must be numeric. Coercing to 1")
+    axis_text_size <- 1 }
   
   # Warning message when attempting to plot too many groups
   if (base::length(base::unique(groupcol)) > base::min(base::length(colors),
                                                        base::length(shapes),
                                                        base::length(lines))) {
-    message('Insufficient aesthetic values provided. 10 colors/shapes/lines are built into the function but you have supplied ', length(unique(groupcol)), ' groups. Please modify `colors`, `lines`, or `shapes` as needed to provide one value per category in your group column.')
+    warning("Insufficient aesthetic values provided. 10 colors/shapes/lines are built into the function but you have supplied ", length(unique(groupcol)), " groups. Please modify 'colors', 'lines', or 'shapes' as needed to provide one value per category in your group column.")
   } else {
 
     # Before actually creating the plot we need to make sure colors/shapes/lines are correctly formatted
@@ -108,7 +127,7 @@ pcoa_ord <- function(mod = NULL, groupcol = NULL, title = NA,
          ylab = base::paste0("PC2 (",
                              base::round(mod$values$Relative_eig[2] * 100,
                                          digits = 2), "%)"),
-         col = 'white', pch = 1)
+         col = 'white', pch = 1, cex.lab = lab_text_size, cex.axis = axis_text_size)
 
     # For each group, add points of a unique color and (up to 5 groups) unique shape (only 5 hollow shapes are available so they're recycled 2x each)
     for(level in levels(group_col_fct)){
